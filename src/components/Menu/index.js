@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { randomRGB } from '../../utils/threeHelpers';
-// import ColorInput from '../ColorInput';
+import ColorInput from '../ColorInput';
 
 import './menu.scss';
 
@@ -9,9 +9,9 @@ export default function Menu(props) {
     const {
         isOpen,
         hasDisplayNone,
-        // leftColor,
-        // rightColor,
-        // figureColor,
+        leftColor,
+        rightColor,
+        figureColor,
         isMobile,
         onClickToggleMenuOpen,
         onChangeColor
@@ -20,19 +20,20 @@ export default function Menu(props) {
     const controlClassNames = classNames({ 'is-hidden': isMobile });
 
     const colorInputs = [];
-    // ['top', 'bottom'].forEach((orientation, orientationIndex) => {
-    //     ['red', 'green', 'blue'].forEach((color, colorIndex) => {
-    //         colorInputs.push(
-    //             <ColorInput orientation={orientation}
-    //                         color={color}
-    //                         topColor={topColor}
-    //                         bottomColor={bottomColor}
-    //                         onChange={onChangeColor}
-    //                         isMobile={isMobile}
-    //                         key={`${orientationIndex}${colorIndex}`} />
-    //         );
-    //     });
-    // });
+    ['left', 'right', 'figure'].forEach((role, roleIndex) => {
+        ['red', 'green', 'blue'].forEach((hue, hueIndex) => {
+            colorInputs.push(
+                <ColorInput role={role}
+                            hue={hue}
+                            leftColor={leftColor}
+                            rightColor={rightColor}
+                            figureColor={figureColor}
+                            onChange={onChangeColor}
+                            isMobile={isMobile}
+                            key={`${roleIndex}${hueIndex}`} />
+            );
+        });
+    });
 
     return (
         <div className={menuClassNames}>
