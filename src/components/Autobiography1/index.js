@@ -23,6 +23,10 @@ export default class Autobiography1 extends Component {
         this.setState({ menuIsOpen: !this.state.menuIsOpen });
     }
 
+    changeColor(leftColor, rightColor, figureColor) {
+        this.setState({ leftColor, rightColor, figureColor });
+    }
+
     render() {
         const { leftColor, rightColor, figureColor, menuIsOpen, menuHasDisplayNone } = this.state;
 
@@ -39,7 +43,8 @@ export default class Autobiography1 extends Component {
                       rightColor={rightColor}
                       figureColor={figureColor}
                       isMobile={bowser.mobile || bowser.tablet}
-                      onClickToggleMenuOpen={() => this.toggleMenu()} />
+                      onClickToggleMenuOpen={() => this.toggleMenu()}
+                      onChangeColor={(lColor, rColor, figureColor) => this.changeColor(lColor, rColor, figureColor)} />
             </div>
         );
     }

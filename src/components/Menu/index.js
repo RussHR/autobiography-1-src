@@ -1,18 +1,21 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-
+import { randomRGB } from '../../utils/threeHelpers';
 // import ColorInput from '../ColorInput';
 
 import './menu.scss';
 
 export default function Menu(props) {
-    const { isOpen,
-            hasDisplayNone,
-            // leftColor,
-            // rightColor,
-            // figureColor,
-            isMobile,
-            onClickToggleMenuOpen } = props;
+    const {
+        isOpen,
+        hasDisplayNone,
+        // leftColor,
+        // rightColor,
+        // figureColor,
+        isMobile,
+        onClickToggleMenuOpen,
+        onChangeColor
+    } = props;
     const menuClassNames = classNames('menu', { 'is-open': isOpen, 'is-hidden': hasDisplayNone });
     const controlClassNames = classNames({ 'is-hidden': isMobile });
 
@@ -57,7 +60,7 @@ export default function Menu(props) {
                     </span>
                 </p>
 
-                <button>
+                <button onClick={() => onChangeColor(randomRGB(), randomRGB(), randomRGB())}>
                     randomize colors
                 </button>
 
@@ -88,5 +91,6 @@ Menu.propTypes = {
         b: PropTypes.number.isRequired
     }),
     isMobile: PropTypes.bool,
-    onClickToggleMenuOpen: PropTypes.func.isRequired
+    onClickToggleMenuOpen: PropTypes.func.isRequired,
+    onChangeColor: PropTypes.func.isRequired
 };
