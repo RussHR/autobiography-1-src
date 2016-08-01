@@ -17,6 +17,27 @@ export default class Autobiography1 extends Component {
             menuHasDisplayNone: false,
             showStats: false
         };
+
+        this._handleKeyup = this.handleKeyup.bind(this);
+    }
+
+    componentDidMount() {
+        window.addEventListener('keyup', this._handleKeyup);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keyup', this._handleKeyup);
+    }
+
+    handleKeyup(e) {
+        switch (e.keyCode) {
+            case 74: // 'j' key
+                this.setState({ menuHasDisplayNone: !this.state.menuHasDisplayNone });
+                break;
+            case 75: // 'k' key
+                this.changeColor(randomRGB(), randomRGB(), randomRGB());
+                break;
+        }
     }
 
     toggleMenu() {
