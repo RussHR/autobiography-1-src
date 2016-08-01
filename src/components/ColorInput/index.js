@@ -34,8 +34,7 @@ export default function ColorInput(props) {
                max="255"
                name={`${role}-color`}
                value={colorToControl[hueLetter]}
-               onChange={onChangeColor}
-               step="1" />
+               onChange={onChangeColor} />
     );
 
     return (
@@ -49,7 +48,8 @@ export default function ColorInput(props) {
                    max="255"
                    name={`${role}-color`}
                    value={colorToControl[hueLetter]}
-                   onChange={onChangeColor} />
+                   onChange={onChangeColor}
+                   step="1" />
             {numberInput}
             <br /><br />
         </div>
