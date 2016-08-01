@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { randomRGB } from '../../utils/threeHelpers';
+import { objectToCssColor, randomRGB } from '../../utils/threeHelpers';
+
+import './autobiography-1.scss';
 
 export default class Autobiography1 extends Component {
     constructor(props) {
@@ -12,9 +14,15 @@ export default class Autobiography1 extends Component {
     }
 
     render() {
+        const { leftColor, rightColor } = this.state;
+
+        const leftColorStyle = { backgroundColor: objectToCssColor(leftColor) };
+        const rightColorStyle = { backgroundColor: objectToCssColor(rightColor) };
+
         return (
-            <div>
-                I am the app!
+            <div className="autobiography-1">
+                <div className="autobiography-1-bg" style={leftColorStyle} />
+                <div className="autobiography-1-bg" style={rightColorStyle} />
             </div>
         );
     }
