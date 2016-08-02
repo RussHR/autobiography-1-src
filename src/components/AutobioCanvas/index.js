@@ -31,11 +31,35 @@ export default class AutobioCanvas extends Component {
 
     initializeMeshes() {
         const { figureColor } = this.props;
-        const geometry = new THREE.TetrahedronGeometry(10);
+
+        const heartShape = new THREE.Shape();
+        heartShape.moveTo(0, -15);
+        heartShape.bezierCurveTo(25, -20, 5, -35, -30, -45);
+        heartShape.bezierCurveTo(-70, -30, -55, -10, -60, 0);
+        heartShape.bezierCurveTo(-55, 15, -35, 35, 0, 50);
+        heartShape.bezierCurveTo(35, 40, 55, 15, 50, -5);
+        heartShape.bezierCurveTo(55, -5, 55, -40, 25, -40);
+        heartShape.bezierCurveTo(15, -45, 0, -15, 5, -20);
+
+        const extrudeSettings = {
+            curveSegments: 12,
+            steps: 2,
+            amount: 12,
+            bevelEnabled: true,
+            bevelThickness: 1,
+            bevelSegments: 2,
+            bevelSize: 1
+        };
+
+        const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
         const color = new THREE.Color(figureColor.r / 255, figureColor.g / 255, figureColor.b / 255);
         this.material = new THREE.MeshBasicMaterial({ color });
         const mesh = new THREE.Mesh(geometry, this.material);
+        mesh.scale.set(0.15, 0.15, 0.15);
+        mesh.rotation.x = Math.PI;
+        mesh.rotation.y = Math.PI / 2;
         this.scene.add(mesh);
+
     }
 
     initializeLights() {
