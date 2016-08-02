@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import bowser from 'bowser';
 import { objectToCssColor, randomRGB } from '../../utils/threeHelpers';
+import AutobioCanvas from '../AutobioCanvas';
 import Menu from '../Menu';
 
 import './autobiography-1.scss';
@@ -15,7 +16,9 @@ export default class Autobiography1 extends Component {
             figureColor: randomRGB(),
             menuIsOpen: false,
             menuHasDisplayNone: false,
-            showStats: false
+            showStats: false,
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
         };
 
         this._handleKeyup = this.handleKeyup.bind(this);
@@ -49,7 +52,15 @@ export default class Autobiography1 extends Component {
     }
 
     render() {
-        const { leftColor, rightColor, figureColor, menuIsOpen, menuHasDisplayNone } = this.state;
+        const {
+            leftColor,
+            rightColor,
+            figureColor,
+            menuIsOpen,
+            menuHasDisplayNone,
+            windowWidth,
+            windowHeight
+        } = this.state;
 
         const leftColorStyle = { backgroundColor: objectToCssColor(leftColor) };
         const rightColorStyle = { backgroundColor: objectToCssColor(rightColor) };
@@ -58,6 +69,7 @@ export default class Autobiography1 extends Component {
             <div className="autobiography-1">
                 <div className="autobiography-1-bg" style={leftColorStyle} />
                 <div className="autobiography-1-bg" style={rightColorStyle} />
+                <AutobioCanvas windowHeight={windowHeight} windowWidth={windowWidth} />
                 <Menu isOpen={menuIsOpen}
                       hasDisplayNone={menuHasDisplayNone}
                       leftColor={leftColor}
