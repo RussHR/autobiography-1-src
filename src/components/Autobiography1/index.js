@@ -69,7 +69,7 @@ export default class Autobiography1 extends Component {
             <div className="autobiography-1">
                 <div className="autobiography-1-bg" style={leftColorStyle} />
                 <div className="autobiography-1-bg" style={rightColorStyle} />
-                <AutobioCanvas windowHeight={windowHeight} windowWidth={windowWidth} />
+                <AutobioCanvas windowHeight={windowHeight} windowWidth={windowWidth} figureColor={figureColor} />
                 <Menu isOpen={menuIsOpen}
                       hasDisplayNone={menuHasDisplayNone}
                       leftColor={leftColor}
