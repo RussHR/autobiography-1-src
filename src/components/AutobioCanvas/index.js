@@ -16,6 +16,7 @@ export default class AutobioCanvas extends Component {
 
         if (nextProps.windowHeight !== this.props.windowHeight || nextProps.windowWidth !== this.props.windowWidth) {
             this.resizeCanvas(nextProps.windowWidth, nextProps.windowHeight);
+            this.setMeshSize(nextProps.windowWidth);
         }
     }
 
@@ -27,6 +28,10 @@ export default class AutobioCanvas extends Component {
         this.renderer.setSize(windowWidth, windowHeight);
         this.camera.aspect = windowWidth / windowHeight;
         this.camera.updateProjectionMatrix();
+    }
+
+    setMeshSize(windowWidth) {
+        this.heartMesh.scale.set(windowWidth / 6000, windowWidth / 6000, windowWidth / 6000);
     }
 
     initializeAnimation() {
@@ -64,11 +69,11 @@ export default class AutobioCanvas extends Component {
         const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
         const color = new THREE.Color(figureColor.r / 255, figureColor.g / 255, figureColor.b / 255);
         this.material = new THREE.MeshBasicMaterial({ color });
-        const mesh = new THREE.Mesh(geometry, this.material);
-        mesh.scale.set(0.15, 0.15, 0.15);
-        mesh.rotation.x = Math.PI;
-        mesh.rotation.y = Math.PI / 2;
-        this.scene.add(mesh);
+        this.heartMesh = new THREE.Mesh(geometry, this.material);
+        this.heartMesh.scale.set(0.15, 0.15, 0.15);
+        this.heartMesh.rotation.x = Math.PI;
+        this.heartMesh.rotation.y = Math.PI / 2;
+        this.scene.add(this.heartMesh);
 
     }
 
