@@ -13,10 +13,20 @@ export default class AutobioCanvas extends Component {
         if (!isEqual(nextProps.figureColor, this.props.figureColor)) {
             this.setFigureColor(nextProps.figureColor);
         }
+
+        if (nextProps.windowHeight !== this.props.windowHeight || nextProps.windowWidth !== this.props.windowWidth) {
+            this.resizeCanvas(nextProps.windowWidth, nextProps.windowHeight);
+        }
     }
 
     setFigureColor({ r, g, b }) {
         this.material.color = { r: r / 255, g: g / 255, b: b / 255 };
+    }
+
+    resizeCanvas(windowWidth, windowHeight) {
+        this.renderer.setSize(windowWidth, windowHeight);
+        this.camera.aspect = windowWidth / windowHeight;
+        this.camera.updateProjectionMatrix();
     }
 
     initializeAnimation() {

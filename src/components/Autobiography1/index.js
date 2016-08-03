@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import bowser from 'bowser';
+import throttle from 'lodash/throttle';
 import { objectToCssColor, randomRGB } from '../../utils/threeHelpers';
 import AutobioCanvas from '../AutobioCanvas';
 import Menu from '../Menu';
@@ -26,10 +27,14 @@ export default class Autobiography1 extends Component {
 
     componentDidMount() {
         window.addEventListener('keyup', this._handleKeyup);
+
+        this._onWindowResize = throttle(() => this.onWindowResize(), 16.667);
+        window.addEventListener('resize', this._onWindowResize);
     }
 
     componentWillUnmount() {
         window.removeEventListener('keyup', this._handleKeyup);
+        window.removeEventListener('resize', this._onWindowResize);
     }
 
     handleKeyup(e) {
@@ -41,6 +46,13 @@ export default class Autobiography1 extends Component {
                 this.changeColor(randomRGB(), randomRGB(), randomRGB());
                 break;
         }
+    }
+
+    onWindowResize() {
+        const windowHeight = window.innerHeight,
+              windowWidth = window.innerWidth;
+
+        this.setState({ windowHeight, windowWidth });
     }
 
     toggleMenu() {
