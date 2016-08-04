@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import THREE from 'three';
+import { Noise } from 'noisejs';
 import isEqual from 'lodash/isEqual';
+
+import { convertFromPerlin } from '../../utils/mathHelpers';
 
 import './autobio-canvas.scss';
 
@@ -45,12 +48,14 @@ export default class AutobioCanvas extends Component {
         const position = this.camera.position.clone().add(direction.multiplyScalar(distance));
         const box = new THREE.Box3().setFromObject(this.heartMesh);
         const maxSize = box.size().x; // x will be larger than y
-        this.maxX = position.x - maxSize;
+        this.rightSideMaxX = position.x - maxSize;
+        this.rightSideMinX = maxSize;
         this.maxY = position.y - maxSize;
     }
 
     initializeAnimation() {
         this.scene = new THREE.Scene();
+        this.noise = new Noise(Math.random());
 
         this.initializeMeshes();
         this.initializeLights();
@@ -116,9 +121,15 @@ export default class AutobioCanvas extends Component {
         this.renderer.render(this.scene, this.camera);
     }
 
-    renderAnimation() {
+    renderAnimation(timestamp) {
+        let perlinTime = timestamp || 0;
+        perlinTime /= 2500;
+        const perlinX = this.noise.perlin2(perlinTime, 1),
+              perlinY = this.noise.perlin2(1, perlinTime);
+        this.heartMesh.position.x = convertFromPerlin(this.rightSideMinX, this.rightSideMaxX, perlinX);
+        this.heartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinY);
         this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(() => this.renderAnimation());
+        requestAnimationFrame((timestamp) => this.renderAnimation(timestamp));
     }
 
     render() {
