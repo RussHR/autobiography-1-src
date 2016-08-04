@@ -94,8 +94,6 @@ export default class AutobioCanvas extends Component {
         this.material = new THREE.MeshBasicMaterial({ color });
         this.leftHeartMesh = new THREE.Mesh(geometry, this.material);
         this.rightHeartMesh = new THREE.Mesh(geometry, this.material);
-        this.leftHeartMesh.rotation.x = Math.PI;
-        this.rightHeartMesh.rotation.x = Math.PI;
         this.setMeshSize(windowWidth);
         this.scene.add(this.leftHeartMesh, this.rightHeartMesh);
     }
@@ -125,6 +123,19 @@ export default class AutobioCanvas extends Component {
         this.renderer.render(this.scene, this.camera);
     }
 
+    setHeartRotation(perlinTime) {
+        this.leftHeartMesh.rotation.x =
+            convertFromPerlin(0, Math.PI * 2, this.noise.perlin3(perlinTime, 1, 1)) + Math.PI;
+        this.leftHeartMesh.rotation.y = convertFromPerlin(0, Math.PI * 2, this.noise.perlin3(1, perlinTime, 1));
+        this.leftHeartMesh.rotation.z = convertFromPerlin(0, Math.PI * 2, this.noise.perlin3(1, 1, perlinTime));
+
+        this.rightHeartMesh.rotation.x =
+            convertFromPerlin(0, Math.PI * 2, this.noise.perlin3(perlinTime, 1000, 1000)) + Math.PI;
+        this.rightHeartMesh.rotation.y =
+            convertFromPerlin(0, Math.PI * 2, this.noise.perlin3(1000, perlinTime, 1000)) + Math.PI;
+        this.rightHeartMesh.rotation.z = convertFromPerlin(0, Math.PI * 2, this.noise.perlin3(1000, 1000, perlinTime));
+    }
+
     renderAnimation(timestamp) {
         let perlinTime = timestamp || 0;
         perlinTime /= 2500;
@@ -136,6 +147,7 @@ export default class AutobioCanvas extends Component {
         this.leftHeartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinYLeftSide);
         this.rightHeartMesh.position.x = convertFromPerlin(this.rightSideMinX, this.rightSideMaxX, perlinXRightSide);
         this.rightHeartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinYRightSide);
+        this.setHeartRotation(perlinTime);
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame((timestamp) => this.renderAnimation(timestamp));
     }
