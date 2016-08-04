@@ -35,7 +35,9 @@ export default class AutobioCanvas extends Component {
     }
 
     setMeshSize(windowWidth) {
-        this.heartMesh.scale.set(windowWidth / 6000, windowWidth / 6000, windowWidth / 6000);
+        const scale = windowWidth / 6000;
+        this.leftHeartMesh.scale.set(scale, scale, scale);
+        this.rightHeartMesh.scale.set(scale, scale, scale);
     }
 
     setMeshBoundaries() {
@@ -46,7 +48,7 @@ export default class AutobioCanvas extends Component {
         const direction = vector.sub(this.camera.position).normalize();
         const distance = -this.camera.position.z / direction.z;
         const position = this.camera.position.clone().add(direction.multiplyScalar(distance));
-        const box = new THREE.Box3().setFromObject(this.heartMesh);
+        const box = new THREE.Box3().setFromObject(this.rightHeartMesh);
         const maxSize = box.size().x; // x will be larger than y
         this.rightSideMaxX = position.x - maxSize;
         this.rightSideMinX = maxSize;
@@ -90,10 +92,12 @@ export default class AutobioCanvas extends Component {
         const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
         const color = new THREE.Color(figureColor.r / 255, figureColor.g / 255, figureColor.b / 255);
         this.material = new THREE.MeshBasicMaterial({ color });
-        this.heartMesh = new THREE.Mesh(geometry, this.material);
-        this.heartMesh.rotation.x = Math.PI;
+        this.leftHeartMesh = new THREE.Mesh(geometry, this.material);
+        this.rightHeartMesh = new THREE.Mesh(geometry, this.material);
+        this.leftHeartMesh.rotation.x = Math.PI;
+        this.rightHeartMesh.rotation.x = Math.PI;
         this.setMeshSize(windowWidth);
-        this.scene.add(this.heartMesh);
+        this.scene.add(this.leftHeartMesh, this.rightHeartMesh);
     }
 
     initializeLights() {
@@ -124,10 +128,14 @@ export default class AutobioCanvas extends Component {
     renderAnimation(timestamp) {
         let perlinTime = timestamp || 0;
         perlinTime /= 2500;
-        const perlinX = this.noise.perlin2(perlinTime, 1),
-              perlinY = this.noise.perlin2(1, perlinTime);
-        this.heartMesh.position.x = convertFromPerlin(this.rightSideMinX, this.rightSideMaxX, perlinX);
-        this.heartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinY);
+        const perlinXRightSide = this.noise.perlin2(perlinTime, 1),
+              perlinYRightSide = this.noise.perlin2(1, perlinTime),
+              perlinXLeftSide = this.noise.perlin2(perlinTime, 1000),
+              perlinYLeftSide = this.noise.perlin2(1000, perlinTime);
+        this.leftHeartMesh.position.x = convertFromPerlin(-this.rightSideMaxX, -this.rightSideMinX, perlinXLeftSide);
+        this.leftHeartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinYLeftSide);
+        this.rightHeartMesh.position.x = convertFromPerlin(this.rightSideMinX, this.rightSideMaxX, perlinXRightSide);
+        this.rightHeartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinYRightSide);
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame((timestamp) => this.renderAnimation(timestamp));
     }
