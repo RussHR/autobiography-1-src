@@ -89,13 +89,15 @@ export default class AutobioCanvas extends Component {
             bevelSize: 1
         };
 
-        const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+        const heartGeometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+        const boxGeometry =  new THREE.BoxGeometry(5, 5, 5);
         const color = new THREE.Color(figureColor.r / 255, figureColor.g / 255, figureColor.b / 255);
         this.material = new THREE.MeshBasicMaterial({ color });
-        this.leftHeartMesh = new THREE.Mesh(geometry, this.material);
-        this.rightHeartMesh = new THREE.Mesh(geometry, this.material);
+        this.leftHeartMesh = new THREE.Mesh(heartGeometry, this.material);
+        this.rightHeartMesh = new THREE.Mesh(heartGeometry, this.material);
+        this.boxMesh = new THREE.Mesh(boxGeometry, this.material);
         this.setMeshSize(windowWidth);
-        this.scene.add(this.leftHeartMesh, this.rightHeartMesh);
+        this.scene.add(this.leftHeartMesh, this.rightHeartMesh, this.boxMesh);
     }
 
     initializeLights() {
@@ -136,6 +138,53 @@ export default class AutobioCanvas extends Component {
         this.rightHeartMesh.rotation.z = convertFromPerlin(0, Math.PI * 2, this.noise.perlin3(1000, 1000, perlinTime));
     }
 
+    moveBoxVertices() {
+        const leftX = this.leftHeartMesh.position.x;
+        const rightX = this.rightHeartMesh.position.x;
+        const leftY = this.leftHeartMesh.position.y;
+        const rightY = this.rightHeartMesh.position.y;
+        const yOffset = 0.002 * this.props.windowWidth;
+
+        this.boxMesh.geometry.vertices.forEach((vertex, index) => {
+            switch (index) {
+                case 0:
+                    vertex.x = rightX;
+                    vertex.y = rightY + yOffset;
+                    break;
+                case 1:
+                    vertex.x = rightX;
+                    vertex.y = rightY + yOffset;
+                    break;
+                case 2:
+                    vertex.x = rightX;
+                    vertex.y = rightY - yOffset;
+                    break;
+                case 3:
+                    vertex.x = rightX;
+                    vertex.y = rightY - yOffset;
+                    break;
+                case 4:
+                    vertex.x = leftX;
+                    vertex.y = leftY + yOffset;
+                    break;
+                case 5:
+                    vertex.x = leftX;
+                    vertex.y = leftY + yOffset;
+                    break;
+                case 6:
+                    vertex.x = leftX;
+                    vertex.y = leftY - yOffset;
+                    break;
+                case 7:
+                    vertex.x = leftX;
+                    vertex.y = leftY - yOffset;
+                    break;
+            }
+        });
+
+        this.boxMesh.geometry.verticesNeedUpdate = true;
+    }
+
     renderAnimation(timestamp) {
         let perlinTime = timestamp || 0;
         perlinTime /= 2500;
@@ -148,6 +197,7 @@ export default class AutobioCanvas extends Component {
         this.rightHeartMesh.position.x = convertFromPerlin(this.rightSideMinX, this.rightSideMaxX, perlinXRightSide);
         this.rightHeartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinYRightSide);
         this.setHeartRotation(perlinTime);
+        this.moveBoxVertices();
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame((timestamp) => this.renderAnimation(timestamp));
     }
