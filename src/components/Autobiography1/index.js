@@ -101,7 +101,8 @@ export default class Autobiography1 extends Component {
                       figureColor={figureColor}
                       isMobile={bowser.mobile || bowser.tablet}
                       onClickToggleMenuOpen={() => this.toggleMenu()}
-                      onChangeColor={(lColor, rColor, figureColor) => this.changeColor(lColor, rColor, figureColor)} />
+                      onChangeColor={(lColor, rColor, figureColor) => this.changeColor(lColor, rColor, figureColor)}
+                      onClickToggleBox={() => this.toggleBox()} />
             </div>
         );
     }

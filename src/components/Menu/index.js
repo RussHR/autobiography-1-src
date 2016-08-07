@@ -14,7 +14,8 @@ export default function Menu(props) {
         figureColor,
         isMobile,
         onClickToggleMenuOpen,
-        onChangeColor
+        onChangeColor,
+        onClickToggleBox
     } = props;
     const menuClassNames = classNames('menu', { 'is-open': isOpen, 'is-hidden': hasDisplayNone });
     const controlClassNames = classNames({ 'is-hidden': isMobile });
@@ -63,6 +64,12 @@ export default function Menu(props) {
                     </span>
                 </p>
 
+                <button onClick={onClickToggleBox}>
+                    toggle box
+                </button>
+
+                <br /><br />
+
                 <button onClick={() => onChangeColor(randomRGB(), randomRGB(), randomRGB())}>
                     randomize colors
                 </button>
@@ -95,5 +102,6 @@ Menu.propTypes = {
     }),
     isMobile: PropTypes.bool,
     onClickToggleMenuOpen: PropTypes.func.isRequired,
-    onChangeColor: PropTypes.func.isRequired
+    onChangeColor: PropTypes.func.isRequired,
+    onClickToggleBox: PropTypes.func.isRequired
 };
