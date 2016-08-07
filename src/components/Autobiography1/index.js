@@ -19,7 +19,8 @@ export default class Autobiography1 extends Component {
             menuHasDisplayNone: false,
             showStats: false,
             windowWidth: window.innerWidth,
-            windowHeight: window.innerHeight
+            windowHeight: window.innerHeight,
+            boxIsVisible: false
         };
 
         this._handleKeyup = this.handleKeyup.bind(this);
@@ -45,6 +46,9 @@ export default class Autobiography1 extends Component {
             case 75: // 'k' key
                 this.changeColor(randomRGB(), randomRGB(), randomRGB());
                 break;
+            case 76: // 'l' key
+                this.toggleBox();
+                break;
         }
     }
 
@@ -63,6 +67,10 @@ export default class Autobiography1 extends Component {
         this.setState({ leftColor, rightColor, figureColor });
     }
 
+    toggleBox() {
+        this.setState({ boxIsVisible: !this.state.boxIsVisible });
+    }
+
     render() {
         const {
             leftColor,
@@ -71,7 +79,8 @@ export default class Autobiography1 extends Component {
             menuIsOpen,
             menuHasDisplayNone,
             windowWidth,
-            windowHeight
+            windowHeight,
+            boxIsVisible
         } = this.state;
 
         const leftColorStyle = { backgroundColor: objectToCssColor(leftColor) };
@@ -81,7 +90,10 @@ export default class Autobiography1 extends Component {
             <div className="autobiography-1">
                 <div className="autobiography-1-bg" style={leftColorStyle} />
                 <div className="autobiography-1-bg" style={rightColorStyle} />
-                <AutobioCanvas windowHeight={windowHeight} windowWidth={windowWidth} figureColor={figureColor} />
+                <AutobioCanvas windowHeight={windowHeight}
+                               windowWidth={windowWidth}
+                               figureColor={figureColor}
+                               boxIsVisible={boxIsVisible} />
                 <Menu isOpen={menuIsOpen}
                       hasDisplayNone={menuHasDisplayNone}
                       leftColor={leftColor}

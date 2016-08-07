@@ -22,6 +22,10 @@ export default class AutobioCanvas extends Component {
             this.setMeshSize(nextProps.windowWidth);
             this.setMeshBoundaries();
         }
+
+        if (nextProps.boxIsVisible !== this.props.boxIsVisible) {
+            this.boxMesh.visible = nextProps.boxIsVisible;
+        }
     }
 
     setFigureColor({ r, g, b }) {
@@ -68,7 +72,7 @@ export default class AutobioCanvas extends Component {
     }
 
     initializeMeshes() {
-        const { figureColor, windowWidth } = this.props;
+        const { figureColor, windowWidth, boxIsVisible } = this.props;
 
         const heartShape = new THREE.Shape();
         heartShape.moveTo(0, -15);
@@ -96,6 +100,7 @@ export default class AutobioCanvas extends Component {
         this.leftHeartMesh = new THREE.Mesh(heartGeometry, this.material);
         this.rightHeartMesh = new THREE.Mesh(heartGeometry, this.material);
         this.boxMesh = new THREE.Mesh(boxGeometry, this.material);
+        this.boxMesh.visible = boxIsVisible;
         this.setMeshSize(windowWidth);
         this.scene.add(this.leftHeartMesh, this.rightHeartMesh, this.boxMesh);
     }
@@ -143,7 +148,7 @@ export default class AutobioCanvas extends Component {
         const rightX = this.rightHeartMesh.position.x;
         const leftY = this.leftHeartMesh.position.y;
         const rightY = this.rightHeartMesh.position.y;
-        const yOffset = 0.002 * this.props.windowWidth;
+        const yOffset = 0.005 * this.props.windowWidth;
 
         this.boxMesh.geometry.vertices.forEach((vertex, index) => {
             switch (index) {
@@ -197,7 +202,11 @@ export default class AutobioCanvas extends Component {
         this.rightHeartMesh.position.x = convertFromPerlin(this.rightSideMinX, this.rightSideMaxX, perlinXRightSide);
         this.rightHeartMesh.position.y = convertFromPerlin(-this.maxY, this.maxY, perlinYRightSide);
         this.setHeartRotation(perlinTime);
-        this.moveBoxVertices();
+
+        if (this.props.boxIsVisible) {
+            this.moveBoxVertices();
+        }
+
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame((timestamp) => this.renderAnimation(timestamp));
     }
@@ -214,5 +223,10 @@ AutobioCanvas.propTypes = {
         r: PropTypes.number.isRequired,
         g: PropTypes.number.isRequired,
         b: PropTypes.number.isRequired
-    }).isRequired
+    }).isRequired,
+    boxIsVisible: PropTypes.bool
+};
+
+AutobioCanvas.defaultProps = {
+    boxIsVisible: false
 };

@@ -58,6 +58,8 @@ export default function Menu(props) {
                         j: toggle menu visibility
                         <br />
                         k: randomize colors
+                        <br />
+                        l: toggle bar visibility
                     </span>
                 </p>
 
