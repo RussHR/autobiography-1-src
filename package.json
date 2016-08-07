@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint src --ext .js",
     "build": "webpack --config webpack.config.prod.js",
-    "dev": "webpack-dev-server --config webpack.config.dev.js",
+    "dev": "webpack-dev-server --config webpack.config.dev.js --host 0.0.0.0",
     "test": "./node_modules/.bin/mocha \"src/**/*-test.js\" --compilers js:babel-core/register"
   },
   "repository": {
