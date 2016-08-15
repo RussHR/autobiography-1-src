@@ -70,7 +70,7 @@ export default function Menu(props) {
 
                 <br /><br />
 
-                <button onClick={() => onChangeColor(randomRGB(), randomRGB(), randomRGB())}>
+                <button onClick={() => setRandomColor(onChangeColor)}>
                     randomize colors
                 </button>
 
@@ -80,6 +80,17 @@ export default function Menu(props) {
             </div>
         </div>
     );
+}
+
+function setRandomColor(onChangeColor) {
+    const leftColor = randomRGB();
+    const rightColor = randomRGB();
+    const figureColor = {
+        r: parseInt((leftColor.r + rightColor.r) / 2),
+        g: parseInt((leftColor.g + rightColor.g) / 2),
+        b: parseInt((leftColor.b + rightColor.b) / 2),
+    };
+    onChangeColor(leftColor, rightColor, figureColor);
 }
 
 Menu.propTypes = {

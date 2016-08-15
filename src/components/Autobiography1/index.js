@@ -11,10 +11,18 @@ export default class Autobiography1 extends Component {
     constructor(props) {
         super(props);
 
+        const leftColor = randomRGB();
+        const rightColor = randomRGB();
+        const figureColor = {
+            r: parseInt((leftColor.r + rightColor.r) / 2),
+            g: parseInt((leftColor.g + rightColor.g) / 2),
+            b: parseInt((leftColor.b + rightColor.b) / 2),
+        };
+
         this.state = {
-            leftColor: randomRGB(),
-            rightColor: randomRGB(),
-            figureColor: randomRGB(),
+            leftColor,
+            rightColor,
+            figureColor,
             menuIsOpen: false,
             menuHasDisplayNone: false,
             showStats: false,
@@ -44,12 +52,23 @@ export default class Autobiography1 extends Component {
                 this.setState({ menuHasDisplayNone: !this.state.menuHasDisplayNone });
                 break;
             case 75: // 'k' key
-                this.changeColor(randomRGB(), randomRGB(), randomRGB());
+                this.setRandomColor();
                 break;
             case 76: // 'l' key
                 this.toggleBox();
                 break;
         }
+    }
+
+    setRandomColor() {
+        const leftColor = randomRGB();
+        const rightColor = randomRGB();
+        const figureColor = {
+            r: parseInt((leftColor.r + rightColor.r) / 2),
+            g: parseInt((leftColor.g + rightColor.g) / 2),
+            b: parseInt((leftColor.b + rightColor.b) / 2),
+        };
+        this.changeColor(leftColor, rightColor, figureColor);
     }
 
     onWindowResize() {
